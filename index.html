@@ -1,0 +1,348 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Datos de transferencia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;600;800&display=swap">
+<style id="css">
+/* Una columna angosta, pensada para abrirse desde un QR en el teléfono: datos copiables arriba, bancos y depósito en tienda abajo. */
+:root{
+  --bg:#eef2f4;
+  --surface:#ffffff;
+  --fg:#13222b;
+  --muted:#586a74;
+  --line:#d3dce1;
+  --accent:#0a6f6a;
+  --accent-fg:#ffffff;
+  --accent-soft:#dcf0ee;
+  --warn:#7a4f00;
+  --warn-bg:#fcefd0;
+  --bad:#a6261f;
+  --f-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1519;
+    --surface:#152127;
+    --fg:#e8f0f3;
+    --muted:#9bb0ba;
+    --line:#263640;
+    --accent:#4fd1c5;
+    --accent-fg:#06211f;
+    --accent-soft:#16363a;
+    --warn:#f2c46b;
+    --warn-bg:#3a2d10;
+    --bad:#ff8a80;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1519;
+  --surface:#152127;
+  --fg:#e8f0f3;
+  --muted:#9bb0ba;
+  --line:#263640;
+  --accent:#4fd1c5;
+  --accent-fg:#06211f;
+  --accent-soft:#16363a;
+  --warn:#f2c46b;
+  --warn-bg:#3a2d10;
+  --bad:#ff8a80;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--f-body);
+  font-size:16px;
+  line-height:1.5;
+  padding-block:28px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{margin:6px 0 0;font-size:clamp(26px,7vw,34px);font-weight:800;line-height:1.1;text-wrap:balance;overflow-wrap:anywhere}
+h2{margin:0 0 6px;font-size:17px;font-weight:800;line-height:1.25;text-wrap:balance}
+.lead{margin:8px 0 0;color:var(--muted);font-size:15px}
+.hint{margin:0 0 12px;color:var(--muted);font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 16px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.lab{grid-column:1/-1;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.val{min-width:0;font-size:18px;font-weight:600;overflow-wrap:anywhere}
+.val.mono{font-family:var(--f-mono);font-weight:500}
+.val.vacio{color:var(--muted)}
+.clabe{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:20px}
+.clabe span{display:flex;flex-direction:column}
+.clabe b{font-weight:500}
+.clabe i{font-family:var(--f-body);font-style:normal;font-size:10px;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.btn{
+  font:inherit;font-size:14px;font-weight:600;
+  min-height:44px;min-width:92px;padding:0 14px;
+  border:1px solid var(--accent);border-radius:10px;
+  background:transparent;color:var(--accent);cursor:pointer;
+}
+.btn:hover{background:var(--accent-soft)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;background:transparent}
+.btn.ok{background:var(--accent);color:var(--accent-fg)}
+.btn.solid{background:var(--accent);color:var(--accent-fg)}
+.btn.solid:hover{filter:brightness(1.08)}
+.btn.wide{width:100%}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bancos{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;list-style:none;margin:0;padding:0}
+.bancos a{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  min-height:46px;padding:10px 14px;
+  border:1px solid var(--line);border-radius:10px;background:var(--surface);
+  color:var(--fg);text-decoration:none;font-size:15px;font-weight:600;
+}
+.bancos a span{color:var(--muted);font-weight:400}
+.bancos a:hover{border-color:var(--accent);color:var(--accent)}
+.tiendas{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:12px 0 0;padding:0}
+.tiendas li{padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--fg);font-size:14px;font-weight:600}
+.foot{margin:0;color:var(--muted);font-size:13px}
+.aviso{padding:12px 14px;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:14px}
+.form{display:flex;flex-direction:column;gap:16px;padding:18px 16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13px;font-weight:600}
+.field input{
+  font:inherit;font-size:16px;width:100%;min-height:46px;padding:10px 12px;
+  border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);
+}
+.field input.mono{font-family:var(--f-mono)}
+.msg{min-height:20px;font-size:13px;color:var(--muted)}
+.msg.ok{color:var(--accent)}
+.msg.bad{color:var(--bad)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.toast-wrap{
+  position:fixed;left:0;right:0;bottom:0;pointer-events:none;
+  display:flex;justify-content:center;
+  padding:0 max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+}
+.toast{max-width:100%;padding:10px 16px;border-radius:999px;background:var(--fg);color:var(--bg);font-size:14px;font-weight:600;opacity:0;transition:opacity .15s}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+<div id="app"></div>
+<script type="application/json" id="datos">{"beneficiario":"Sarai Fuentes Trujillo","clabe":"638180010120143284","banco":"Nubank","codigo":"5101 2531 0328 8434"}</script>
+<script id="main">
+(function(){
+'use strict';
+
+var TITULO='Datos de transferencia';
+var FONT='https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;600;800&display=swap';
+var RESET=':root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}';
+var SO='<'+'script', SC='<'+'/script>';
+
+var BANCOS=[
+  ['BBVA','https://www.bbva.mx'],
+  ['Banorte','https://www.banorte.com'],
+  ['Santander','https://www.santander.com.mx'],
+  ['Banamex','https://www.banamex.com'],
+  ['HSBC','https://www.hsbc.com.mx'],
+  ['Scotiabank','https://www.scotiabank.com.mx'],
+  ['Inbursa','https://www.inbursa.com'],
+  ['BanCoppel','https://www.bancoppel.com'],
+  ['Banco Azteca','https://www.bancoazteca.com.mx'],
+  ['Hey Banco','https://www.heybanco.com'],
+  ['Nu','https://nu.com.mx'],
+  ['Mercado Pago','https://www.mercadopago.com.mx']
+];
+var TIENDAS=['OXXO','Soriana','Kiosko','Chedraui','Farmacias del Ahorro'];
+
+var S=leer();
+var editing=false, owner=false, artifact=null, tt=null;
+
+function leer(){
+  var base={beneficiario:'XXXX',clabe:'XXXX',banco:'Nubank',codigo:'XXXXX'};
+  try{
+    var o=JSON.parse(document.getElementById('datos').textContent);
+    for(var k in base){ if(typeof o[k]==='string' && o[k].trim()) base[k]=o[k].trim(); }
+  }catch(e){}
+  return base;
+}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function pend(v){return /^x+$/i.test(String(v).trim());}
+function clabeOk(c){
+  if(!/^\d{18}$/.test(c)) return false;
+  var w=[3,7,1], s=0;
+  for(var i=0;i<17;i++) s+=(parseInt(c.charAt(i),10)*w[i%3])%10;
+  return (10-(s%10))%10===parseInt(c.charAt(17),10);
+}
+function clabeHtml(c){
+  var d=String(c).replace(/\s/g,'');
+  if(/^\d{18}$/.test(d)){
+    var g=[[d.slice(0,3),'banco'],[d.slice(3,6),'plaza'],[d.slice(6,17),'cuenta'],[d.slice(17),'dígito']];
+    return g.map(function(x){return '<span><b>'+x[0]+'</b><i>'+x[1]+'</i></span>';}).join('');
+  }
+  return esc(c);
+}
+function textos(){
+  var cl=String(S.clabe).replace(/\s/g,'');
+  return {
+    ben:S.beneficiario, clabe:cl, banco:S.banco, codigo:S.codigo,
+    todo:'Beneficiario: '+S.beneficiario+'\nCLABE: '+cl+'\nEntidad financiera: '+S.banco
+  };
+}
+
+/* ---- vistas ---- */
+function fila(etq,id,html,clave,extra){
+  var vacio=pend(textos()[clave]);
+  return '<div class="row"><div class="lab">'+etq+'</div>'+
+    '<div class="val '+(extra||'')+(vacio?' vacio':'')+'" id="v-'+id+'">'+html+'</div>'+
+    '<button type="button" class="btn" data-copy="'+clave+'"'+(vacio?' disabled':'')+' aria-label="Copiar '+etq.toLowerCase()+'">Copiar</button></div>';
+}
+function vistaDatos(){
+  var algunoPend=pend(S.beneficiario)||pend(S.clabe)||pend(S.codigo);
+  var aviso=(owner&&algunoPend)?'<div class="aviso">Todavía hay datos de ejemplo (XXXX). Toca «Editar mis datos» al final de la página para capturar los reales.</div>':'';
+  var bancos=BANCOS.map(function(b){return '<li><a href="'+b[1]+'" target="_blank" rel="noopener noreferrer">'+esc(b[0])+' <span aria-hidden="true">↗</span></a></li>';}).join('');
+  var tiendas=TIENDAS.map(function(t){return '<li>'+esc(t)+'</li>';}).join('');
+  var editar=owner?'<button type="button" class="btn" data-act="edit">Editar mis datos</button>':'';
+  return '<main class="wrap">'+
+    '<header><div class="eyebrow">Transferencia SPEI</div><h1>'+esc(S.beneficiario)+'</h1>'+
+    '<p class="lead">Datos para enviarme un pago. Cada dato tiene su botón para copiarlo.</p></header>'+
+    aviso+
+    '<section class="card" aria-label="Datos de la cuenta">'+
+      fila('Beneficiario','ben',esc(S.beneficiario),'ben')+
+      fila('CLABE interbancaria','clabe',clabeHtml(S.clabe),'clabe','mono clabe')+
+      fila('Entidad financiera','banco',esc(S.banco),'banco')+
+    '</section>'+
+    '<button type="button" class="btn wide" data-copy="todo"'+(pend(S.clabe)?' disabled':'')+'>Copiar todos los datos</button>'+
+    '<section aria-label="Bancos"><h2>Abre tu banco para transferir</h2>'+
+      '<p class="hint">Copia la CLABE, entra a tu app o banca en línea y elige transferencia a otro banco. Estos enlaces abren el sitio oficial de cada banco.</p>'+
+      '<ul class="bancos">'+bancos+'</ul></section>'+
+    '<section aria-label="Depósito en tienda"><h2>Depósito en tienda, sin tarjeta</h2>'+
+      '<div class="card">'+fila('Código de depósito','codigo',esc(S.codigo),'codigo','mono')+'</div>'+
+      '<ul class="tiendas">'+tiendas+'</ul></section>'+
+    '<p class="foot">Antes de enviar, confirma que el nombre del beneficiario que muestra tu banco coincide con el de esta página.</p>'+
+    editar+
+  '</main>';
+}
+function valorEdit(v){return pend(v)?'':esc(v);}
+function vistaEditar(){
+  return '<main class="wrap">'+
+    '<header><div class="eyebrow">Editar</div><h1>Mis datos de transferencia</h1>'+
+    '<p class="lead">Al guardar, la página se actualiza para quien abra el QR.</p></header>'+
+    '<form id="f" class="card form" novalidate>'+
+      '<div class="field"><label for="i-ben">Beneficiario</label><input id="i-ben" autocomplete="off" placeholder="Nombre completo" value="'+valorEdit(S.beneficiario)+'"></div>'+
+      '<div class="field"><label for="i-clabe">CLABE (18 dígitos)</label><input id="i-clabe" class="mono" inputmode="numeric" autocomplete="off" maxlength="22" placeholder="000000000000000000" value="'+valorEdit(S.clabe)+'"><div class="msg" id="m-clabe" aria-live="polite"></div></div>'+
+      '<div class="field"><label for="i-banco">Entidad financiera</label><input id="i-banco" autocomplete="off" value="'+esc(S.banco)+'"></div>'+
+      '<div class="field"><label for="i-codigo">Código de depósito en tienda</label><input id="i-codigo" class="mono" autocomplete="off" value="'+valorEdit(S.codigo)+'"></div>'+
+      '<div class="actions"><button type="submit" class="btn solid" id="b-save">Guardar</button><button type="button" class="btn" data-act="cancel">Cancelar</button></div>'+
+      '<div class="msg" id="m-save" role="status"></div>'+
+    '</form>'+
+  '</main>';
+}
+
+/* ---- acciones ---- */
+function toast(t){
+  var el=document.getElementById('toast'); if(!el) return;
+  el.textContent=t; el.classList.add('on');
+  clearTimeout(tt); tt=setTimeout(function(){el.classList.remove('on');},2200);
+}
+function seleccionar(id){
+  var el=document.getElementById('v-'+id); if(!el) return false;
+  try{var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);return true;}catch(e){return false;}
+}
+function copiado(btn){
+  var antes=btn.textContent; btn.textContent='Copiado'; btn.classList.add('ok');
+  toast('Copiado');
+  setTimeout(function(){btn.textContent=antes; btn.classList.remove('ok');},1600);
+}
+function copiar(btn){
+  var clave=btn.dataset.copy, texto=textos()[clave];
+  function plan_b(){
+    var ok=false;
+    try{
+      var ta=document.createElement('textarea'); ta.value=texto; ta.setAttribute('readonly','');
+      ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+      ta.select(); ok=document.execCommand('copy'); document.body.removeChild(ta);
+    }catch(e){ok=false;}
+    if(ok){copiado(btn);}
+    else if(clave!=='todo' && seleccionar(clave)){toast('Texto seleccionado: cópialo con tu teclado');}
+    else{toast('No se pudo copiar. Copia cada dato por separado.');}
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(texto).then(function(){copiado(btn);},plan_b);
+  }else{plan_b();}
+}
+function msgClabe(d){
+  var m=document.getElementById('m-clabe'); if(!m) return;
+  if(!d){m.textContent='';m.className='msg';return;}
+  if(d.length<18){m.textContent=d.length+' de 18 dígitos';m.className='msg';return;}
+  if(clabeOk(d)){m.textContent='CLABE válida: el dígito verificador coincide.';m.className='msg ok';}
+  else{m.textContent='El dígito verificador no coincide. Revisa los números.';m.className='msg bad';}
+}
+function v(id){return document.getElementById(id).value.trim();}
+
+function buildDoc(st){
+  var css=document.getElementById('css').textContent;
+  var main=document.getElementById('main').textContent;
+  var json=JSON.stringify(st).replace(/</g,'\\u003c');
+  var contenido='<title>'+TITULO+'</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n'+
+    '<link rel="stylesheet" href="'+FONT+'">\n<style id="css">'+css+'</style>\n<div id="app"></div>\n'+
+    SO+' type="application/json" id="datos">'+json+SC+'\n'+SO+' id="main">'+main+SC;
+  return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>'+RESET+'</style></head><body>'+contenido+'</body></html>';
+}
+function guardar(nuevo){
+  var btn=document.getElementById('b-save'), st=document.getElementById('m-save');
+  btn.disabled=true; btn.textContent='Guardando…'; st.className='msg'; st.textContent='';
+  artifact.publish(buildDoc(nuevo)).then(function(){
+    st.textContent='Guardado. La página se está actualizando.';
+  },function(e){
+    btn.disabled=false; btn.textContent='Guardar';
+    var c=e&&e.code;
+    st.className='msg bad';
+    if(c==='conflict') st.textContent='Otra versión se guardó antes. La página se recargará con esa versión; vuelve a editar.';
+    else if(c==='not_granted'||c==='not_writer') st.textContent='Esta cuenta no tiene permiso para guardar cambios.';
+    else st.textContent='No se pudo guardar. Intenta de nuevo.';
+  });
+}
+
+/* ---- render ---- */
+function render(){
+  var app=document.getElementById('app');
+  app.innerHTML=editing?vistaEditar():vistaDatos();
+  app.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){copiar(b);});});
+  app.querySelectorAll('[data-act]').forEach(function(b){
+    b.addEventListener('click',function(){
+      editing=(b.dataset.act==='edit'); render();
+      window.scrollTo(0,0);
+    });
+  });
+  if(editing){
+    var ic=document.getElementById('i-clabe');
+    msgClabe(ic.value.replace(/\D/g,''));
+    ic.addEventListener('input',function(){var d=ic.value.replace(/\D/g,'').slice(0,18); ic.value=d; msgClabe(d);});
+    document.getElementById('f').addEventListener('submit',function(e){
+      e.preventDefault();
+      var cl=v('i-clabe').replace(/\D/g,'');
+      if(cl && !clabeOk(cl)){
+        msgClabe(cl);
+        document.getElementById('m-save').className='msg bad';
+        document.getElementById('m-save').textContent='Corrige la CLABE para poder guardar.';
+        ic.focus(); return;
+      }
+      guardar({beneficiario:v('i-ben')||'XXXX',clabe:cl||'XXXX',banco:v('i-banco')||'Nubank',codigo:v('i-codigo')||'XXXXX'});
+    });
+  }
+}
+
+/* ---- arranque ---- */
+var tw=document.createElement('div'); tw.className='toast-wrap';
+tw.innerHTML='<div id="toast" class="toast" role="status" aria-live="polite"></div>';
+document.body.appendChild(tw);
+render();
+
+if(window.claude && claude.use){
+  Promise.all([
+    claude.use('user').catch(function(){return null;}),
+    claude.use('artifact').catch(function(){return null;})
+  ]).then(function(r){
+    var u=r[0]; artifact=r[1];
+    owner=!!(artifact && u && (u.isOwner() || u.canEdit()));
+    if(owner && !editing) render();
+  });
+}
+})();
+</script></body></html>
